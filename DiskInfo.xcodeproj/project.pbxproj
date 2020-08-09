@@ -51,7 +51,9 @@
 				941B7C871C7EB28F007DB08F /* DiskInfo */,
 				941B7C861C7EB28F007DB08F /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		941B7C861C7EB28F007DB08F /* Products */ = {
 			isa = PBXGroup;
