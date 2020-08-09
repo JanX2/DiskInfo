@@ -74,5 +74,7 @@ class ViewController: NSViewController {
     nameLabel.stringValue = volume.name
     infoLabel.stringValue = "Capacity: \(bytesFormatter.string(fromByteCount: volume.capacity))." +
       "Available: \(bytesFormatter.string(fromByteCount: volume.available))"
+    
+    graphView.fileDistribution = volume.fileDistribution
   }
 }
