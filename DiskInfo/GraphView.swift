@@ -24,6 +24,7 @@ import Cocoa
 
 
 @IBDesignable class GraphView: NSView {
+  fileprivate var bytesFormatter = ByteCountFormatter()
   
   override func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
@@ -170,6 +171,51 @@ extension GraphView {
         
         // 5
         clipRect.origin.x = clipRect.maxX
+        
+        // 1
+        let legendRectWidth = (barChartRect.size.width / CGFloat(fileTypes.count))
+        let legendOriginX = barChartRect.origin.x + floor(CGFloat(index) * legendRectWidth)
+        let legendOriginY = barChartRect.minY - 2 * Constants.marginSize
+        let legendSquareRect = CGRect(x: legendOriginX, y: legendOriginY,
+                                      width: Constants.barChartLegendSquareSize,
+                                      height: Constants.barChartLegendSquareSize)
+        
+        let legendSquarePath = CGMutablePath()
+        legendSquarePath.addRect( legendSquareRect )
+        context?.addPath(legendSquarePath)
+        context?.setFillColor(fileTypeColors.fillColor.cgColor)
+        context?.setStrokeColor(fileTypeColors.strokeColor.cgColor)
+        context?.drawPath(using: .fillStroke)
+        
+        // 2
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.alignment = .left
+        let nameTextAttributes = [
+          NSAttributedString.Key.font: NSFont.barChartLegendNameFont,
+          NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        
+        // 3
+        let nameTextSize = fileType.name.size(withAttributes: nameTextAttributes)
+        let legendTextOriginX = legendSquareRect.maxX + Constants.legendTextMargin
+        let legendTextOriginY = legendOriginY - 2 * Constants.pieChartBorderWidth
+        let legendNameRect = CGRect(x: legendTextOriginX, y: legendTextOriginY,
+                                    width: legendRectWidth - legendSquareRect.size.width - 2 *
+                                      Constants.legendTextMargin,
+                                    height: nameTextSize.height)
+        
+        // 4
+        fileType.name.draw(in: legendNameRect, withAttributes: nameTextAttributes)
+        
+        // 5
+        let bytesText = bytesFormatter.string(fromByteCount: fileTypeInfo.bytes)
+        let bytesTextAttributes = [
+          NSAttributedString.Key.font: NSFont.barChartLegendSizeTextFont,
+          NSAttributedString.Key.paragraphStyle: paragraphStyle,
+          NSAttributedString.Key.foregroundColor: NSColor.secondaryLabelColor]
+        let bytesTextSize = bytesText.size(withAttributes: bytesTextAttributes)
+        let bytesTextRect = legendNameRect.offsetBy(dx: 0.0, dy: -bytesTextSize.height)
+        bytesText.draw(in: bytesTextRect, withAttributes: bytesTextAttributes)
       }
     }
   }
