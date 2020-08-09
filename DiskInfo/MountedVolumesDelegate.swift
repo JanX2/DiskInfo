@@ -30,8 +30,8 @@ class MountedVolumesDelegate: NSObject {
   var volumeSelectionBlock: SelectionBlock?
 
   fileprivate struct Constants {
-    static let headerCellID = "HeaderCell"
-    static let volumeCellID = "VolumeCell"
+    static let headerCellID = NSUserInterfaceItemIdentifier(rawValue: "HeaderCell")
+    static let volumeCellID = NSUserInterfaceItemIdentifier(rawValue: "VolumeCell")
   }
 
   init(outlineView: NSOutlineView, selectionBlock: @escaping SelectionBlock) {
@@ -59,10 +59,10 @@ extension MountedVolumesDelegate: NSOutlineViewDelegate {
     var cell: NSTableCellView?
 
     if let section = item as? Section {
-      cell = outlineView.make(withIdentifier: Constants.headerCellID, owner: self) as? NSTableCellView
+      cell = outlineView.makeView(withIdentifier: Constants.headerCellID, owner: self) as? NSTableCellView
       cell?.textField?.stringValue = section.name
     } else if let item = item as? Section.Item {
-      cell = outlineView.make(withIdentifier: Constants.volumeCellID, owner: self) as? NSTableCellView
+      cell = outlineView.makeView(withIdentifier: Constants.volumeCellID, owner: self) as? NSTableCellView
       cell?.textField?.stringValue = item.volume.name
       cell?.imageView?.image = item.volume.image
     }

@@ -142,7 +142,7 @@ extension VolumeInfo {
         return nil
     }
 
-    let image = NSWorkspace.shared().icon(forFile: volumeURL.path)
+    let image = NSWorkspace.shared.icon(forFile: volumeURL.path)
     let volumeInfo = VolumeInfo(name: name, volumeType: "", image: image,
                                 capacity: capacity, available: available,
                                 removable: removable, fileDistribution: fileDistribution)
