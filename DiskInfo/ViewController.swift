@@ -37,7 +37,8 @@ class ViewController: NSViewController {
   @IBOutlet var imageView: NSImageView!
   @IBOutlet var nameLabel: NSTextField!
   @IBOutlet var infoLabel: NSTextField!
-
+  @IBOutlet weak var graphView: GraphView!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 

@@ -563,6 +563,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="graphView" destination="cT9-jj-dNA" id="Fu4-qf-h1U"/>
                         <outlet property="imageView" destination="T1x-fC-Ux1" id="66i-YH-psM"/>
                         <outlet property="infoLabel" destination="SI2-O0-kMS" id="ZlZ-3J-daW"/>
                         <outlet property="nameLabel" destination="hmM-aK-wtd" id="rqJ-FV-Utp"/>
