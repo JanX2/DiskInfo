@@ -54,4 +54,58 @@ import Cocoa
                                          distribution: distribution)
   }
   
+  // 1
+  fileprivate struct Constants {
+    static let barHeight: CGFloat = 30.0
+    static let barMinHeight: CGFloat = 20.0
+    static let barMaxHeight: CGFloat = 40.0
+    static let marginSize: CGFloat = 20.0
+    static let pieChartWidthPercentage: CGFloat = 1.0 / 3.0
+    static let pieChartBorderWidth: CGFloat = 1.0
+    static let pieChartMinRadius: CGFloat = 30.0
+    static let pieChartGradientAngle: CGFloat = 90.0
+    static let barChartCornerRadius: CGFloat = 4.0
+    static let barChartLegendSquareSize: CGFloat = 8.0
+    static let legendTextMargin: CGFloat = 5.0
+  }
+  
+  // 2
+  @IBInspectable var barHeight: CGFloat = Constants.barHeight {
+    didSet {
+      barHeight = max(min(barHeight, Constants.barMaxHeight), Constants.barMinHeight)
+    }
+  }
+  @IBInspectable var pieChartUsedLineColor: NSColor = NSColor.pieChartUsedStrokeColor
+  @IBInspectable var pieChartAvailableLineColor: NSColor = NSColor.pieChartAvailableStrokeColor
+  @IBInspectable var pieChartAvailableFillColor: NSColor = NSColor.pieChartAvailableFillColor
+  @IBInspectable var pieChartGradientStartColor: NSColor = NSColor.pieChartGradientStartColor
+  @IBInspectable var pieChartGradientEndColor: NSColor = NSColor.pieChartGradientEndColor
+  @IBInspectable var barChartAvailableLineColor: NSColor = NSColor.availableStrokeColor
+  @IBInspectable var barChartAvailableFillColor: NSColor = NSColor.availableFillColor
+  @IBInspectable var barChartAppsLineColor: NSColor = NSColor.appsStrokeColor
+  @IBInspectable var barChartAppsFillColor: NSColor = NSColor.appsFillColor
+  @IBInspectable var barChartMoviesLineColor: NSColor = NSColor.moviesStrokeColor
+  @IBInspectable var barChartMoviesFillColor: NSColor = NSColor.moviesFillColor
+  @IBInspectable var barChartPhotosLineColor: NSColor = NSColor.photosStrokeColor
+  @IBInspectable var barChartPhotosFillColor: NSColor = NSColor.photosFillColor
+  @IBInspectable var barChartAudioLineColor: NSColor = NSColor.audioStrokeColor
+  @IBInspectable var barChartAudioFillColor: NSColor = NSColor.audioFillColor
+  @IBInspectable var barChartOthersLineColor: NSColor = NSColor.othersStrokeColor
+  @IBInspectable var barChartOthersFillColor: NSColor = NSColor.othersFillColor
+  
+  // 3
+  func colorsForFileType(_ fileType: FileType) -> (strokeColor: NSColor, fillColor: NSColor) {
+    switch fileType {
+    case .audio(_, _):
+      return (strokeColor: barChartAudioLineColor, fillColor: barChartAudioFillColor)
+    case .movies(_, _):
+      return (strokeColor: barChartMoviesLineColor, fillColor: barChartMoviesFillColor)
+    case .photos(_, _):
+      return (strokeColor: barChartPhotosLineColor, fillColor: barChartPhotosFillColor)
+    case .apps(_, _):
+      return (strokeColor: barChartAppsLineColor, fillColor: barChartAppsFillColor)
+    case .other(_, _):
+      return (strokeColor: barChartOthersLineColor, fillColor: barChartOthersFillColor)
+    }
+  }
 }
