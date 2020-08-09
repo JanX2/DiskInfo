@@ -28,8 +28,8 @@ import Cocoa
   override func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
     
-    NSColor.white.setFill()
-    bounds.fill()
+    let context = NSGraphicsContext.current?.cgContext
+    drawBarGraphInContext(context)
   }
   
   var fileDistribution: FilesDistribution? {
@@ -140,6 +140,13 @@ extension GraphView {
     context?.drawPath(using: .fillStroke)
   }
   
+  func drawBarGraphInContext(_ context: CGContext?) {
+    let barChartRect = barChartRectangle()
+    drawRoundedRect(barChartRect, inContext: context,
+                    radius: Constants.barChartCornerRadius,
+                    borderColor: barChartAvailableLineColor.cgColor,
+                    fillColor: barChartAvailableFillColor.cgColor)
+  }
 }
 
 // MARK: - Calculations extension
