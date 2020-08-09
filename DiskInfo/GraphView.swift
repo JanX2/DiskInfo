@@ -31,6 +31,8 @@ import Cocoa
     
     let context = NSGraphicsContext.current?.cgContext
     drawBarGraphInContext(context)
+    
+    drawPieChart()
   }
   
   var fileDistribution: FilesDistribution? {
@@ -114,6 +116,37 @@ import Cocoa
 // MARK: - Drawing extension
 
 extension GraphView {
+  func drawPieChart() {
+    guard let fileDistribution = fileDistribution else {
+      return
+    }
+    
+    // 1
+    let rect = pieChartRectangle()
+    let circle = NSBezierPath(ovalIn: rect)
+    pieChartAvailableFillColor.setFill()
+    pieChartAvailableLineColor.setStroke()
+    circle.stroke()
+    circle.fill()
+    
+    // 2
+    let path = NSBezierPath()
+    let center = CGPoint(x: rect.midX, y: rect.midY)
+    let usedPercent = Double(fileDistribution.capacity - fileDistribution.available) /
+      Double(fileDistribution.capacity)
+    let endAngle = CGFloat(360 * usedPercent)
+    let radius = rect.size.width / 2.0
+    path.move(to: center)
+    path.line(to: CGPoint(x: rect.maxX, y: center.y))
+    path.appendArc(withCenter: center, radius: radius,
+                                           startAngle: 0, endAngle: endAngle)
+    path.close()
+    
+    // 3
+    pieChartUsedLineColor.setStroke()
+    path.stroke()
+  }
+  
   func drawRoundedRect(_ rect: CGRect, inContext context: CGContext?,
                        radius: CGFloat, borderColor: CGColor, fillColor: CGColor) {
     // 1
