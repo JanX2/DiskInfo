@@ -146,6 +146,32 @@ extension GraphView {
                     radius: Constants.barChartCornerRadius,
                     borderColor: barChartAvailableLineColor.cgColor,
                     fillColor: barChartAvailableFillColor.cgColor)
+    
+    // 1
+    if let fileTypes = fileDistribution?.distribution, let capacity = fileDistribution?.capacity, capacity > 0 {
+      var clipRect = barChartRect
+      // 2
+      for (index, fileType) in fileTypes.enumerated() {
+        // 3
+        let fileTypeInfo = fileType.fileTypeInfo
+        let clipWidth = floor(barChartRect.width * CGFloat(fileTypeInfo.percent))
+        clipRect.size.width = clipWidth
+        
+        // 4
+        context?.saveGState()
+        context?.clip(to: clipRect)
+        
+        let fileTypeColors = colorsForFileType(fileType)
+        drawRoundedRect(barChartRect, inContext: context,
+                        radius: Constants.barChartCornerRadius,
+                        borderColor: fileTypeColors.strokeColor.cgColor,
+                        fillColor: fileTypeColors.fillColor.cgColor)
+        context?.restoreGState()
+        
+        // 5
+        clipRect.origin.x = clipRect.maxX
+      }
+    }
   }
 }
 
