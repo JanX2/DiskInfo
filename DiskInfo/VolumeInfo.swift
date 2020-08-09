@@ -23,32 +23,32 @@
 import Cocoa
 
 enum FileType {
-
+  
   case apps(bytes: Int64, percent: Double)
   case photos(bytes: Int64, percent: Double)
   case audio(bytes: Int64, percent: Double)
   case movies(bytes: Int64, percent: Double)
   case other(bytes: Int64, percent: Double)
-
+  
   var fileTypeInfo: (bytes: Int64, percent: Double) {
     switch self {
     case .apps(let bytes, let percent):
       return (bytes: bytes, percent: percent)
-
+      
     case .photos(let bytes, let percent):
       return (bytes: bytes, percent: percent)
-
+      
     case .audio(let bytes, let percent):
       return (bytes: bytes, percent: percent)
-
+      
     case .movies(let bytes, let percent):
       return (bytes: bytes, percent: percent)
-
+      
     case .other(let bytes, let percent):
       return (bytes: bytes, percent: percent)
     }
   }
-
+  
   var name: String {
     switch self {
     case .apps(_, _):
@@ -87,7 +87,7 @@ extension FilesDistribution {
     let rand = arc4random_uniform(15) + 5
     return Double(rand) / 100.0
   }
-
+  
   static func randomDistributionWithCapacity(_ capacity: Int64, available: Int64) -> FilesDistribution? {
     guard capacity > 0 else {
       return nil
@@ -103,7 +103,7 @@ extension FilesDistribution {
     let moviesPercent = Double(movies) / Double(capacity)
     let other = Int64(used) - (apps + photos + audio + movies)
     let otherPercent = Double(other) / Double(capacity)
-
+    
     let distribution: [FileType] = [
       .apps(bytes: apps, percent: appsPercent),
       .photos(bytes: photos, percent: photosPercent),
@@ -111,9 +111,9 @@ extension FilesDistribution {
       .movies(bytes: movies, percent: moviesPercent),
       .other(bytes: other, percent: otherPercent)
     ]
-
+    
     let fileDistribution = FilesDistribution(capacity: capacity, available: available, distribution: distribution)
-
+    
     return fileDistribution
   }
 }
@@ -122,7 +122,7 @@ extension VolumeInfo {
   static func volumeInfo(_ volumeURL: URL) -> VolumeInfo? {
     var nameResource: AnyObject?, removableResource: AnyObject?, capacityResource: AnyObject?,
     availableSpaceResource: AnyObject?, localDiskResource: AnyObject?
-
+    
     do {
       try (volumeURL as NSURL).getResourceValue(&nameResource, forKey: URLResourceKey.volumeNameKey)
       try (volumeURL as NSURL).getResourceValue(&capacityResource, forKey: URLResourceKey.volumeTotalCapacityKey)
@@ -132,7 +132,7 @@ extension VolumeInfo {
     } catch {
       return nil
     }
-
+    
     guard let name = nameResource as? String,
       let capacity = capacityResource?.int64Value as Int64?,
       let removable = removableResource as? Bool,
@@ -141,15 +141,15 @@ extension VolumeInfo {
       let fileDistribution = FilesDistribution.randomDistributionWithCapacity(capacity, available: available) , isLocal else {
         return nil
     }
-
+    
     let image = NSWorkspace.shared.icon(forFile: volumeURL.path)
     let volumeInfo = VolumeInfo(name: name, volumeType: "", image: image,
                                 capacity: capacity, available: available,
                                 removable: removable, fileDistribution: fileDistribution)
-
+    
     return volumeInfo
   }
-
+  
   static func mountedVolumes() -> [VolumeInfo] {
     let keysToRead = [
       URLResourceKey.volumeIsRemovableKey,
@@ -159,15 +159,15 @@ extension VolumeInfo {
       URLResourceKey.volumeUUIDStringKey,
       URLResourceKey.volumeAvailableCapacityKey
     ]
-
+    
     guard let volumes = FileManager.default
       .mountedVolumeURLs(includingResourceValuesForKeys: keysToRead,
                                                        options: [.skipHiddenVolumes]) else {
                                                         return []
     }
-
+    
     var volumesInfo = [VolumeInfo]()
-
+    
     for volumeURL in volumes {
       if let info = volumeInfo(volumeURL) {
         volumesInfo.append(info)

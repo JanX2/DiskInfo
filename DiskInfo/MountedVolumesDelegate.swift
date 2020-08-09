@@ -25,15 +25,15 @@ import Cocoa
 typealias SelectionBlock = (_ volume: VolumeInfo) -> Void
 
 class MountedVolumesDelegate: NSObject {
-
+  
   var outlineView: NSOutlineView
   var volumeSelectionBlock: SelectionBlock?
-
+  
   fileprivate struct Constants {
     static let headerCellID = NSUserInterfaceItemIdentifier(rawValue: "HeaderCell")
     static let volumeCellID = NSUserInterfaceItemIdentifier(rawValue: "VolumeCell")
   }
-
+  
   init(outlineView: NSOutlineView, selectionBlock: @escaping SelectionBlock) {
     self.outlineView = outlineView
     self.volumeSelectionBlock = selectionBlock
@@ -43,7 +43,7 @@ class MountedVolumesDelegate: NSObject {
 }
 
 extension MountedVolumesDelegate: NSOutlineViewDelegate {
-
+  
   func outlineViewSelectionDidChange(_ notification: Notification) {
     guard let outlineView = notification.object as? NSOutlineView else {
       return
@@ -54,10 +54,10 @@ extension MountedVolumesDelegate: NSOutlineViewDelegate {
     }
     volumeSelectionBlock?(item.volume)
   }
-
+  
   func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
     var cell: NSTableCellView?
-
+    
     if let section = item as? Section {
       cell = outlineView.makeView(withIdentifier: Constants.headerCellID, owner: self) as? NSTableCellView
       cell?.textField?.stringValue = section.name
@@ -68,11 +68,11 @@ extension MountedVolumesDelegate: NSOutlineViewDelegate {
     }
     return cell
   }
-
+  
   func outlineView(_ outlineView: NSOutlineView, isGroupItem item: Any) -> Bool {
     return item is Section
   }
-
+  
   func outlineView(_ outlineView: NSOutlineView, shouldSelectItem item: Any) -> Bool {
     return !(item is section)
   }
