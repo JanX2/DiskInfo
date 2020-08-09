@@ -141,3 +141,35 @@ extension GraphView {
   }
   
 }
+
+// MARK: - Calculations extension
+
+extension GraphView {
+  // 1
+  func pieChartRectangle() -> CGRect {
+    let width = bounds.size.width * Constants.pieChartWidthPercentage - 2 * Constants.marginSize
+    let height = bounds.size.height - 2 * Constants.marginSize
+    let diameter = max(min(width, height), Constants.pieChartMinRadius)
+    let rect = CGRect(x: Constants.marginSize,
+                      y: bounds.midY - diameter / 2.0,
+                      width: diameter, height: diameter)
+    return rect
+  }
+  
+  // 2
+  func barChartRectangle() -> CGRect {
+    let pieChartRect = pieChartRectangle()
+    let width = bounds.size.width - pieChartRect.maxX - 2 * Constants.marginSize
+    let rect = CGRect(x: pieChartRect.maxX + Constants.marginSize,
+                      y: pieChartRect.midY + Constants.marginSize,
+                      width: width, height: barHeight)
+    return rect
+  }
+  
+  // 3
+  func barChartLegendRectangle() -> CGRect {
+    let barchartRect = barChartRectangle()
+    let rect = barchartRect.offsetBy(dx: 0.0, dy: -(barchartRect.size.height + Constants.marginSize))
+    return rect
+  }
+}
