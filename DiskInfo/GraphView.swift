@@ -145,6 +145,12 @@ extension GraphView {
     // 3
     pieChartUsedLineColor.setStroke()
     path.stroke()
+    
+    if let gradient = NSGradient(starting: pieChartGradientStartColor,
+                                 ending: pieChartGradientEndColor) {
+      gradient.draw(in: path, angle: Constants.pieChartGradientAngle)
+    }
+    
   }
   
   func drawRoundedRect(_ rect: CGRect, inContext context: CGContext?,
