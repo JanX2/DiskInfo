@@ -22,13 +22,36 @@
 
 import Cocoa
 
-class GraphView: NSView {
+
+@IBDesignable class GraphView: NSView {
   
   override func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
     
     NSColor.white.setFill()
     bounds.fill()
+  }
+  
+  var fileDistribution: FilesDistribution? {
+    didSet {
+      needsDisplay = true
+    }
+  }
+  
+  override func prepareForInterfaceBuilder() {
+    let used = Int64(100000000000)
+    let available = used / 3
+    let filesBytes = used / 5
+    let distribution: [FileType] = [
+      .apps(bytes: filesBytes / 2, percent: 0.1),
+      .photos(bytes: filesBytes, percent: 0.2),
+      .movies(bytes: filesBytes * 2, percent: 0.15),
+      .audio(bytes: filesBytes, percent: 0.18),
+      .other(bytes: filesBytes, percent: 0.2)
+    ]
+    fileDistribution = FilesDistribution(capacity: used + available,
+                                         available: available,
+                                         distribution: distribution)
   }
   
 }
