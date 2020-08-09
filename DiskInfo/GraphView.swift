@@ -141,7 +141,7 @@ extension GraphView {
     path.move(to: center)
     path.line(to: CGPoint(x: rect.maxX, y: center.y))
     path.appendArc(withCenter: center, radius: radius,
-                                           startAngle: 0, endAngle: endAngle)
+                   startAngle: 0, endAngle: endAngle)
     path.close()
     
     // 3
