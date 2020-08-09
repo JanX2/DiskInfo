@@ -153,6 +153,36 @@ extension GraphView {
       gradient.draw(in: path, angle: Constants.pieChartGradientAngle)
     }
     
+    // 1
+    let usedMidAngle = endAngle / 2.0
+    let availableMidAngle = (180.0 - endAngle) / 2.0
+    let halfRadius = radius / 2.0
+    
+    // 2
+    let usedSpaceText = bytesFormatter.string(fromByteCount: usedSpace)
+    let usedSpaceTextAttributes = [
+      NSAttributedString.Key.font: NSFont.pieChartLegendFont,
+      NSAttributedString.Key.foregroundColor: NSColor.pieChartUsedSpaceTextColor]
+    let usedSpaceTextSize = usedSpaceText.size(withAttributes: usedSpaceTextAttributes)
+    let xPos = rect.midX + CGFloat(cos(usedMidAngle.radians)) *
+      halfRadius - (usedSpaceTextSize.width / 2.0)
+    let yPos = rect.midY + CGFloat(sin(usedMidAngle.radians)) *
+      halfRadius - (usedSpaceTextSize.height / 2.0)
+    usedSpaceText.draw(at: CGPoint(x: xPos, y: yPos),
+                       withAttributes: usedSpaceTextAttributes)
+    
+    // 3
+    let availableSpaceText = bytesFormatter.string(fromByteCount: fileDistribution.available)
+    let availableSpaceTextAttributes = [
+      NSAttributedString.Key.font: NSFont.pieChartLegendFont,
+      NSAttributedString.Key.foregroundColor: NSColor.pieChartAvailableSpaceTextColor]
+    let availableSpaceTextSize = availableSpaceText.size(withAttributes: availableSpaceTextAttributes)
+    let availableXPos = rect.midX + CGFloat(cos(availableMidAngle.radians)) *
+      halfRadius - (availableSpaceTextSize.width / 2.0)
+    let availableYPos = rect.midY + CGFloat(sin(availableMidAngle.radians)) *
+      halfRadius - (availableSpaceTextSize.height / 2.0)
+    availableSpaceText.draw(at: CGPoint(x: availableXPos, y: availableYPos),
+                            withAttributes: availableSpaceTextAttributes)
   }
   
   func drawRoundedRect(_ rect: CGRect, inContext context: CGContext?,
